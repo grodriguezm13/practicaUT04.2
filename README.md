@@ -4,6 +4,13 @@
 
 Autor - Guillermo Rodriguez Moraga
 
+Version 1.0.2 - Creacion de VideoSystem y mejoras
+- Se ha implementado la clase abstracta Production
+- Movie y Serie heredan de Production
+- Se ha creado VideoSystem mediante Singleton
+- Se ha creado la funcion de testeo
+    - Se han añadido algunas funciones por consola al testeo
+
 Version 1.0.1 - Creacion de objetos en el archivo video.js
 - Se ha creado el objeto Person
 - Se ha creado el objeto Category
