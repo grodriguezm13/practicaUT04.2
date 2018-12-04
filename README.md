@@ -4,6 +4,14 @@
 
 Autor - Guillermo Rodriguez Moraga
 
+Version 1.0.3.1 - Modificacion de nombres de fichero y separacion de ficheros .js
+- Se ha cambiado el nombre de video.js a VideoSystem.js
+- Se han separado los objetos de VideoSystem y trasladado al fichero ObjetosVideoSystem.js
+- Se ha modificado el archivo video.html
+- Se han movido todos los fichero js a la carpeta JS 
+
+Version 1.0.3 - Creacion del js de errores y separacion de las funciones de testeo
+
 Version 1.0.2 - Creacion de VideoSystem y mejoras
 - Se ha implementado la clase abstracta Production
 - Movie y Serie heredan de Production

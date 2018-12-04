@@ -1,21 +1,29 @@
 "use strict";
 
 //Objeto para identificar los datos de una persona.
-function Person(name, lastName1, lastName2, born, picture) {
-    //Validación de parámetros obligatorios
+function Person(name, lastName1, born, lastName2 = null, picture = null) {
+	//La función se invoca con el operador new
+	if (!(this instanceof Person)) {
+		throw new InvalidAccessConstructorException();}
+
+	//Validación de parámetros obligatorios
 	name = typeof name !== 'undefined' ? name : "";
 	if (name === ""){ throw new Error("No puedes dejar el nombre vacio");}
     lastName1 = typeof lastName1 !== 'undefined' ? lastName1 : "";
-    if (lastName1 === ""){ throw new Error("No puedes dejar el lastName vacio");}
-    born = typeof Date !== 'undefined' ? born : "";
-    if (born === ""){ throw new Error("El formato del nacimiento esta vacio o es invalido");}
-
+	if (lastName1 === ""){ throw new Error("No puedes dejar el lastName1 vacio");}
+	born = typeof Date !== 'undefined' ? born : "";
+	if (born === ""){ throw new Error("El formato del nacimiento esta vacio o es invalido");}
+	lastName2 = typeof lastName2 !== 'undefined' ? lastName2 : "";
+	if (lastName2 === ""){ throw new Error("No puedes dejar el lastName2 vacio");}
+	picture = typeof picture !== 'undefined' ? picture : "";
+	if (picture === ""){ throw new Error("El formato de la ruta es invalido");}
+	
     //Declaracion de atributos
     var _name = name;
     var _lastName1 = lastName1;
-    var _lastName2 = lastName2 || "";
+    var _lastName2 = lastName2;
     var _born = born;
-    var _picture = picture || "";
+    var _picture = picture;
 
     //Declaracion de getter y setters
 	Object.defineProperty(this, 'name', {
@@ -88,19 +96,27 @@ function Person(name, lastName1, lastName2, born, picture) {
         }		
     });
 }//Fin de Person
+Person.prototype = {};
+Person.prototype.constructor = Person;
 Person.prototype.toString = function(){
 	return "Nombre completo: " + this.name + ", " + this.lastName1 + " " + this.lastName2 + ". Fecha de nacimiento: "+ this.born + ". Imagen: "+ this.picture;
-}
+};
 
 //Con este objeto podemos crear la estructura de categorías.
-function Category(name, description) {
-	//Validación de parámetros obligatorios
+function Category(name, description = "Sin descripcion") {
+	//La función se invoca con el operador new
+	if (!(this instanceof Category)) {
+		throw new InvalidAccessConstructorException();}
+	
+		//Validación de parámetros obligatorios
 	name = typeof name !== 'undefined' ? name : "";
 	if (name === ""){ throw new Error("No puedes dejar el nombre vacio");}
+	description = typeof description !== 'undefined' ? description : "";
+	if (description === ""){ throw new Error("No puedes dejar la descripcion vacia");}
 
 	//Declaracion de atributos
     var _name = name;
-	var _description = description || "";
+	var _description = description;
 	
 	//Declaracion de getter y setters
 	Object.defineProperty(this, 'name', {
@@ -131,12 +147,18 @@ function Category(name, description) {
         }		
     });
 }//Fin de Category
+Category.prototype = {};
+Category.prototype.constructor = Category;
 Category.prototype.toString = function(){
 	return "Nombre: " + this.name + ". Descripcion: "+ this.description;
-}
+};
 
 //Representa un recurso audiovisual.
-function Resource(duration, link, audios, subtitles){
+function Resource(duration, link, audios = null, subtitles = null){
+	//La función se invoca con el operador new
+	if (!(this instanceof Resource)) {
+		throw new InvalidAccessConstructorException();}
+
 	//Validación de parámetros obligatorios
 	duration = typeof duration !== 'undefined' ? duration : "";
 	if (duration === ""){ throw new Error("No puedes dejar la duracion vacia");}
@@ -206,6 +228,11 @@ function Resource(duration, link, audios, subtitles){
         }		
 	});
 }//Fin de Resource
+Resource.prototype = {};
+Resource.prototype.constructor = Resource;
+Resource.prototype.toString = function(){
+	return "Duracion: " + this.duration + " minutos. Enlace del recurso: " + this.link + ". Audio: " + this.audios + ". Subtitulos: " + this.subtitles;
+};
 
 //Funcion para crear Production que tiene herencia con Movie y Serie
 (function(){ 
@@ -213,7 +240,7 @@ function Resource(duration, link, audios, subtitles){
 	var abstractCreateLock = false; 
 
 	//Constructor de production.
-	function Production(title, nationality, publication, synopsis, image){
+	function Production(title, publication, nationality = null, synopsis = null, image = null){
 		//Validación clase abstracta
 		if(abstractCreateLock){throw new Error("No puedes instanciar Production");}		
 
@@ -309,15 +336,19 @@ function Resource(duration, link, audios, subtitles){
 	}
 
 	//Definimos la subclase MOvie que hereda de Production y Representa un recurso película que podremos reproducir en el sistema
-	function Movie(resource, locations){
+	function Movie(resource = null, locations = null){
 		//Llamada al superconstructor. Debemos desactivar el seguro para realizarla.
 		abstractCreateLock = false;
 		Production.call(this,resource, locations);	
 		abstractCreateLock = true;
 
+		//La función se invoca con el operador new
+		if (!(this instanceof Movie)) {
+			throw new InvalidAccessConstructorException();}
+
 		//Declaracion de atributos
-		var _resource = resource || "";
-		var _locations = locations || "";
+		var _resource = resource;
+		var _locations = locations;
 
 		//Declaracion de getter y setters
 		Object.defineProperty(this, 'resource', {
@@ -356,26 +387,30 @@ function Resource(duration, link, audios, subtitles){
 	}
 	
 	//Definimos la subclase serie que hereda de Production y representa un recurso serie que podremos reproducir
-	function Serie(season){
+	function Serie(seasons = null){
 		//Llamada al superconstructor. Debemos desactivar el seguro para realizarla.
 		abstractCreateLock = false;
-		Production.call(this,season);	
+		Production.call(this,seasons);	
 		abstractCreateLock = true;
 
+		//La función se invoca con el operador new
+		if (!(this instanceof Serie)) {
+			throw new InvalidAccessConstructorException();}
+
 		//Declaracion de atributos
-		var _season = season || "";
+		var _seasons = seasons;
 
 		//Declaracion de getter y setters
 		Object.defineProperty(this, 'season', {
 			get:function(){
-				return _season;
+				return _seasons;
 			},
 			set:function(value){
 				value = typeof Season !== 'undefined' ? value : "";
 		        if (value === ""){
                     throw new Error("Recurso invalido");
                 }else{
-                    _season = value;
+                    _seasons = value;
                 }//Fin del if
 			}		
         });		
@@ -396,8 +431,12 @@ function Resource(duration, link, audios, subtitles){
 })();//Fin de la clase abstracta y las subclases
 
 //Definimos la clase season que representa una temporada de una serie.
-function Season(title, episodes){
-	//Validación de parámetros obligatorios
+function Season(title, episodes = null){
+	//La función se invoca con el operador new
+	if (!(this instanceof Season)) {
+		throw new InvalidAccessConstructorException();}
+	
+		//Validación de parámetros obligatorios
 	title = typeof title !== 'undefined' ? title : "";
 	if (title === ""){ throw new Error("No puedes dejar el titulo vacio");}
 
@@ -429,22 +468,33 @@ function Season(title, episodes){
 			if (value === ""){
 				throw new Error("Episodio invalido");
 			}else{
-				_episodes = value;
+				_episodes = { 
+					title: String, 
+					episode: Resource, 
+					scenarios: [Location] 
+				};
 			}//Fin del if
 		}		
 	});	
 }//Fin de la funcion Serie
+Season.prototype = {};
+Season.prototype.constructor = Season;
 Season.prototype.toString = function(){
 	return "Titulo: " + this.title + ". Episodios: "+ this.episodes;
-}
+};
 
 //Objeto para identificar los datos de una persona.
 function User(userName, email, password) {
-    //Validación de parámetros obligatorios
+	//La función se invoca con el operador new
+	if (!(this instanceof User)) {
+		throw new InvalidAccessConstructorException();}
+	
+		//Validación de parámetros obligatorios
 	userName = typeof userName !== 'undefined' ? userName : "";
 	if (userName === ""){ throw new Error("No puedes dejar el nombre vacio");}
-    email = typeof email !== 'undefined' ? email : "";
-    if (email === ""){ throw new Error("No puedes dejar el mail vacio");}
+    if (email === 'undefined' || email === '') throw new EmptyValueException("email");	
+	if (/^[a-zA-Z][a-zA-Z0-9_\-]*(\.[a-zA-Z0-9_\-]*)*[a-zA-Z0-9]\@[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/.test (email) !== true)
+		throw new InvalidValueException("email", email);
     password = typeof password !== 'undefined' ? password : "";
     if (password === ""){ throw new Error("No puedes dejar la contraseña vacia");}
 
@@ -497,12 +547,18 @@ function User(userName, email, password) {
         }		
 	});
 }//Fin de User
+User.prototype = {};
+User.prototype.constructor = User;
 User.prototype.toString = function(){
 	return "Nombre Usuario: " + this.userName + ". Email: "+ this.email + ". Pass: " + this.password;
-}
+};
 
 //Objeto para identificar los datos de una persona.
 function Coordinate(latitude, longitude) {
+	//La función se invoca con el operador new
+	if (!(this instanceof Coordinate)) {
+		throw new InvalidAccessConstructorException();}
+
     //Validación de parámetros obligatorios
 	latitude = typeof latitude !== 'undefined' ? latitude : "";
 	if (latitude === ""){ throw new Error("No puedes dejar el nombre vacio");}
@@ -542,155 +598,8 @@ function Coordinate(latitude, longitude) {
         }		
     });
 }//Fin de Coordinate
+Coordinate.prototype = {};
+Coordinate.prototype.constructor = Coordinate;
 Coordinate.prototype.toString = function(){
 	return "Latitude: " + this.latitude + ". Longitud: "+ this.longitude;
-}
-
-//Declaración objeto VideoSystem
-var VideoSystem = (function () {
-	//Objeto con la instancia única VideoSystem
-	var instantiated; 
-
-	function init() { //Inicialización del Singleton
-
-		//Declaración de la función constructora de VideoSystem
-		function VideoSystem(){
-			//La función se invoca con el operador new
-			if (!(this instanceof VideoSystem)) 
-				throw new InvalidAccessConstructorException();
-
-			//Definición de atributos privados del objeto
-			var _name = name; //Nombre del sistema
-			var _users = []; //usuarios que tienen acceso al sistema.
-			var _productions = []; //Listado de producciones que tenemos en el sistema.
-			var _categories = []; //Las categorías de las producciones.
-			var _actors = []; //Actores y actrices que tenemos registrados.
-			var _directors = []; //Directores que tenemos en el sistema.
-
-			//Declaracion de getter y setter
-			//Devuelve el nombre del sistema
-			Object.defineProperty(this, 'name', {
-				get:function(){
-					return _name;
-				},
-				set:function(value){
-					value = typeof name !== 'undefined' ? value : "";
-					if (value === "" || value === 'undefined'){
-						throw new Error("No puedes dejar el nombre vacio");
-					}else{
-						_name = value;
-					}//Fin del if
-				}		
-			});
-
-			//Devuelve un iterador que permite recorrer las categorías del sistema
-			Object.defineProperty(this, 'categories', {
-				get:function(){
-				    var nextIndex = 0;		    
-				    return {
-				       next: function(){
-				           return nextIndex < _categories.length ?
-				               {value: _categories[nextIndex++], done: false} :
-				               {done: true};
-				       }
-				    }
-				}	
-			});	
-
-			//Dado un objeto, devuelve la posición de ese objeto.
-			this.getItemPosition = function(item){
-				function compareItems(arrayItem) {
-				  return (arrayItem.name === item.name)
-				}
-				return _categories.findIndex(compareItems);		
-			}
-
-			//Añade una nueva categoría
-			this.addCategory = function(category){
-				if(!(category instanceof Category)){
-					throw new Error ("El elemento que quieres introducir no es una categoria");
-				}
-				if (category == null) {
-					throw new Error ("La categoria no puede ser nula");
-				}
-				var position = this.getItemPosition(category); 
-				//Si no existe la categoria se añade al array	
-				if (position === -1){
-					_categories.push(category);
-				} else{
-					throw new Error ("La categoria ya existe");
-				}
-				return _categories.length;
-			};//Fin de addCategory
-
-			this.removeCategory = function(){
-
-			};//Fin de removeCategory
-			
-		}//Fin de la funcion constructora de VideoSystem
-		VideoSystem.prototype = {}; 
-		VideoSystem.prototype.constructor = VideoSystem;
-
-		//Devolvemos el objeto para que sea una instancia única.
-		var sc = new VideoSystem();
-		return sc;
-	} //Fin inicialización del Singleton
-	return {
-		// Devuelve un objeto con el método getInstance
-		getInstance: function () { 
-			//Si es la primera llamada sera undefined y ejecutara el init()
-			if (!instantiated) { 
-				instantiated = init();
-			}
-			return instantiated; 
-		}
-	};
-})();//Fin de VideoSystem
-
-function testVideo(){
-	try {
-		var persona1 = new Person("Marcos","Diaz","",new Date(1999,12,31),"ruta de la imagen");
-		console.log("Objeto Person: " + persona1.toString());
-	} catch (error) {
-		console.log("Ha fallado: " + error);
-	}
-	try {
-		var categoria1 = new Category("Comedia","Las risas ja,ja");
-		console.log("Objeto Category: " + categoria1.toString());	
-	} catch (error) {
-		console.log("Ha fallado: " + error);
-	}
-	try {
-		var recurso1 = new Resource(140, "ruta");
-		console.log("Objeto Resource: " + recurso1.duration);	
-	} catch (error) {
-		console.log("Ha fallado: " + error);
-	}
-	try {
-		var coor1 = new Coordinate(133,125);
-		console.log("Objeto Coordinate: " + coor1.toString());
-		var movie1 = new Movie("Vengadores","Americana",new Date(2012,5,5),"Resumen","ruta",recurso1,coor1);	
-		console.log("Objeto Movie: " + movie1.toString());
-	} catch (error) {
-		console.log("Ha fallado: " + error);
-	}
-	var video = new VideoSystem.getInstance();
-	video.name = "Prueba";
-	console.log("Nombre del sistema: " + video.name);
-	video.addCategory(categoria1);
-	video.addCategory(new Category("Terror","Los sustos y eso"));
-	console.log("Categorias existentes.");
-	var iterableItem = video.categories;
-	var item = iterableItem.next();
-	while(!item.done){		
-		console.log("Categoria: " + item.value);
-		item = iterableItem.next();
-	}
-	try {
-		video.addCategory(categoria1);
-	} catch (error) {
-		console.log(error);
-	}
-}//Fin de testVideo
-
-window.onload = testVideo;
+};
