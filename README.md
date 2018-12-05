@@ -4,6 +4,13 @@
 
 Autor - Guillermo Rodriguez Moraga
 
+Version 1.0.4 - Creacion de metodos de VideoSystem.
+- Se ha creado Getter categories, addCategory y removeCategory
+- Se ha creado Getter users, addUser y removeUser
+- Se ha creado Getter productions, addProduction y removeProduction
+- Se ha creado Getter actors, addActor y removeActor
+- Se han añadido las funciones a testVideo.js
+
 Version 1.0.3.1 - Modificacion de nombres de fichero y separacion de ficheros .js
 - Se ha cambiado el nombre de video.js a VideoSystem.js
 - Se han separado los objetos de VideoSystem y trasladado al fichero ObjetosVideoSystem.js

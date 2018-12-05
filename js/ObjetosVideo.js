@@ -8,15 +8,15 @@ function Person(name, lastName1, born, lastName2 = null, picture = null) {
 
 	//Validación de parámetros obligatorios
 	name = typeof name !== 'undefined' ? name : "";
-	if (name === ""){ throw new Error("No puedes dejar el nombre vacio");}
+	if (name === ""){ throw new EmptyValueException("name");}
     lastName1 = typeof lastName1 !== 'undefined' ? lastName1 : "";
-	if (lastName1 === ""){ throw new Error("No puedes dejar el lastName1 vacio");}
+	if (lastName1 === ""){ throw new EmptyValueException("lastName1");}
 	born = typeof Date !== 'undefined' ? born : "";
-	if (born === ""){ throw new Error("El formato del nacimiento esta vacio o es invalido");}
+	if (born === ""){ throw new InvalidValueException("born", born);}
 	lastName2 = typeof lastName2 !== 'undefined' ? lastName2 : "";
-	if (lastName2 === ""){ throw new Error("No puedes dejar el lastName2 vacio");}
+	if (lastName2 === ""){ throw new EmptyValueException("lastName2");}
 	picture = typeof picture !== 'undefined' ? picture : "";
-	if (picture === ""){ throw new Error("El formato de la ruta es invalido");}
+	if (picture === ""){ throw new EmptyValueException("picture");}
 	
     //Declaracion de atributos
     var _name = name;
@@ -33,7 +33,7 @@ function Person(name, lastName1, born, lastName2 = null, picture = null) {
 		set:function(value){
 			value = typeof name !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar el nombre vacio");
+                throw new EmptyValueException("name");
             }else{
                 _name = value;
             }//Fin del if
@@ -47,7 +47,7 @@ function Person(name, lastName1, born, lastName2 = null, picture = null) {
 		set:function(value){
 			value = typeof lastName1 !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar el lastName1 vacio");
+                throw new EmptyValueException("lastName1");
             }else{
                 _lastName1 = value;
             }//Fin del if
@@ -61,7 +61,7 @@ function Person(name, lastName1, born, lastName2 = null, picture = null) {
 		set:function(value){
 			value = typeof lastName2 !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar el lastName2 vacio");
+                throw new EmptyValueException("lastName2");
             }else{
                 _lastName2 = value;
             }//Fin del if
@@ -75,7 +75,7 @@ function Person(name, lastName1, born, lastName2 = null, picture = null) {
 		set:function(value){
 			value = typeof Date !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar la fecha de nacimiento vacia");
+                throw new InvalidValueException("born", born);
             }else{
                 _born = value;
             }//Fin del if
@@ -89,7 +89,7 @@ function Person(name, lastName1, born, lastName2 = null, picture = null) {
 		set:function(value){
 			value = typeof picture !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar la imagen vacia");
+                throw new EmptyValueException("picture");
             }else{
                 _picture = value;
             }//Fin del if
@@ -110,9 +110,9 @@ function Category(name, description = "Sin descripcion") {
 	
 		//Validación de parámetros obligatorios
 	name = typeof name !== 'undefined' ? name : "";
-	if (name === ""){ throw new Error("No puedes dejar el nombre vacio");}
+	if (name === ""){ throw new EmptyValueException("name");}
 	description = typeof description !== 'undefined' ? description : "";
-	if (description === ""){ throw new Error("No puedes dejar la descripcion vacia");}
+	if (description === ""){ throw new EmptyValueException("description");}
 
 	//Declaracion de atributos
     var _name = name;
@@ -126,7 +126,7 @@ function Category(name, description = "Sin descripcion") {
 		set:function(value){
 			value = typeof name !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar el nombre vacio");
+                throw new EmptyValueException("name");
             }else{
                 _name = value;
             }//Fin del if
@@ -140,7 +140,7 @@ function Category(name, description = "Sin descripcion") {
 		set:function(value){
 			value = typeof description !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar la descripcion vacia");
+                throw new EmptyValueException("description");
             }else{
                 _description = value;
             }//Fin del if
@@ -161,9 +161,9 @@ function Resource(duration, link, audios = null, subtitles = null){
 
 	//Validación de parámetros obligatorios
 	duration = typeof duration !== 'undefined' ? duration : "";
-	if (duration === ""){ throw new Error("No puedes dejar la duracion vacia");}
+	if (duration === ""){ throw new EmptyValueException("duration");}
 	link = typeof link !== 'undefined' ? link : "";
-	if (link === ""){ throw new Error("No puedes dejar la ruta vacia");}
+	if (link === ""){ throw new EmptyValueException("link");}
 
 	//Declaracion de atributos
     var _duration = duration;
@@ -179,7 +179,7 @@ function Resource(duration, link, audios = null, subtitles = null){
 		set:function(value){
 			value = typeof duration !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar el nombre vacio");
+                throw new EmptyValueException("duration");
             }else{
                 _duration = value;
             }//Fin del if
@@ -193,7 +193,7 @@ function Resource(duration, link, audios = null, subtitles = null){
 		set:function(value){
 			value = typeof link !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar el nombre vacio");
+                throw new EmptyValueException("link");
             }else{
                 _link = value;
             }//Fin del if
@@ -207,7 +207,7 @@ function Resource(duration, link, audios = null, subtitles = null){
 		set:function(value){
 			value = typeof audios !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar el nombre vacio");
+                throw new EmptyValueException("audios");
             }else{
                 _audios = value;
             }//Fin del if
@@ -221,7 +221,7 @@ function Resource(duration, link, audios = null, subtitles = null){
 		set:function(value){
 			value = typeof subtitles !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar el nombre vacio");
+                throw new EmptyValueException("subtitles");
             }else{
                 _subtitles = value;
             }//Fin del if
@@ -242,13 +242,13 @@ Resource.prototype.toString = function(){
 	//Constructor de production.
 	function Production(title, publication, nationality = null, synopsis = null, image = null){
 		//Validación clase abstracta
-		if(abstractCreateLock){throw new Error("No puedes instanciar Production");}		
+		if(abstractCreateLock){throw new AbstractClassException("Production");}		
 
 		//Validación de parámetros obligatorios
 		title = typeof title !== 'undefined' ? title : "";
-		if (title === ""){ throw new Error("No puedes dejar el titulo vacio");}
+		if (title === ""){ throw new EmptyValueException("title");}
         publication = typeof Date !== 'undefined' ? publication : "";
-        if (publication === ""){ throw new Error("El formato de la publicacion esta vacio o es invalido");}
+        if (publication === ""){ throw new InvalidValueException("publication", publication);}
         
         //Declaracion de atributos
         var _title = title; 
@@ -265,7 +265,7 @@ Resource.prototype.toString = function(){
 			set:function(value){
 				value = typeof title !== 'undefined' ? value : "";
 		        if (value === ""){
-                    throw new Error("No puedes dejar el titulo vacio");
+                    throw new EmptyValueException("title");
                 }else{
                     _title = value;
                 }//Fin del if
@@ -279,7 +279,7 @@ Resource.prototype.toString = function(){
 			set:function(value){
 				value = typeof nationality !== 'undefined' ? value : "";
 		        if (value === ""){
-                    throw new Error("No puedes dejar la nacionalidad vacia");
+                    throw new EmptyValueException("nationality");
                 }else{
                     _nationality = value;
                 }//Fin del if
@@ -293,7 +293,7 @@ Resource.prototype.toString = function(){
 			set:function(value){
 				value = typeof Date !== 'undefined' ? value : "";
 		        if (value === ""){
-                    throw new Error("No puedes dejar la fecha de publicacion vacia");
+                    throw new InvalidValueException("publication", publication);
                 }else{
                     _publication = value;
                 }//Fin del if
@@ -307,7 +307,7 @@ Resource.prototype.toString = function(){
 			set:function(value){
 				value = typeof synopsis !== 'undefined' ? value : "";
 		        if (value === ""){
-                    throw new Error("No puedes dejar la fecha de publicacion vacia");
+                    throw new EmptyValueException("sypnosis");
                 }else{
                     _synopsis = value;
                 }//Fin del if
@@ -321,7 +321,7 @@ Resource.prototype.toString = function(){
 			set:function(value){
 				value = typeof image !== 'undefined' ? value : "";
 		        if (value === ""){
-                    throw new Error("No puedes dejar la ruta de la imagen vacia");
+                    throw new EmptyValueException("image");
                 }else{
                     _image = value;
                 }//Fin del if
@@ -358,7 +358,7 @@ Resource.prototype.toString = function(){
 			set:function(value){
 				value = typeof Resource !== 'undefined' ? value : "";
 		        if (value === ""){
-                    throw new Error("Recurso invalido");
+                    throw new InvalidValueException("resource", resource);
                 }else{
                     _resource = value;
                 }//Fin del if
@@ -372,7 +372,7 @@ Resource.prototype.toString = function(){
 			set:function(value){
 				value = typeof Coordinate !== 'undefined' ? value : "";
 		        if (value === ""){
-                    throw new Error("Recurso invalido");
+                    throw new InvalidValueException("locations", locations);
                 }else{
                     _locations = value;
                 }//Fin del if
@@ -408,7 +408,7 @@ Resource.prototype.toString = function(){
 			set:function(value){
 				value = typeof Season !== 'undefined' ? value : "";
 		        if (value === ""){
-                    throw new Error("Recurso invalido");
+                    throw new InvalidValueException("season", season);
                 }else{
                     _seasons = value;
                 }//Fin del if
@@ -438,7 +438,7 @@ function Season(title, episodes = null){
 	
 		//Validación de parámetros obligatorios
 	title = typeof title !== 'undefined' ? title : "";
-	if (title === ""){ throw new Error("No puedes dejar el titulo vacio");}
+	if (title === ""){ throw new EmptyValueException("title");}
 
     //Declaracion de atributos
     var _title = title;
@@ -452,7 +452,7 @@ function Season(title, episodes = null){
 		set:function(value){
 			value = typeof title !== 'undefined' ? value : "";
 			if (value === ""){
-				throw new Error("El titulo no puede dejarse vacio");
+				throw new EmptyValueException("title");
 			}else{
 				_title = value;
 			}//Fin del if
@@ -466,7 +466,7 @@ function Season(title, episodes = null){
 		set:function(value){
 			value = typeof episodes !== 'undefined' ? value : "";
 			if (value === ""){
-				throw new Error("Episodio invalido");
+				throw new EmptyValueException("episodes");
 			}else{
 				_episodes = { 
 					title: String, 
@@ -491,12 +491,12 @@ function User(userName, email, password) {
 	
 		//Validación de parámetros obligatorios
 	userName = typeof userName !== 'undefined' ? userName : "";
-	if (userName === ""){ throw new Error("No puedes dejar el nombre vacio");}
+	if (userName === ""){ throw new EmptyValueException("userName");}
     if (email === 'undefined' || email === '') throw new EmptyValueException("email");	
 	if (/^[a-zA-Z][a-zA-Z0-9_\-]*(\.[a-zA-Z0-9_\-]*)*[a-zA-Z0-9]\@[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/.test (email) !== true)
 		throw new InvalidValueException("email", email);
     password = typeof password !== 'undefined' ? password : "";
-    if (password === ""){ throw new Error("No puedes dejar la contraseña vacia");}
+    if (password === ""){ throw new EmptyValueException("password");}
 
     //Declaracion de atributos
     var _userName = userName;
@@ -561,9 +561,9 @@ function Coordinate(latitude, longitude) {
 
     //Validación de parámetros obligatorios
 	latitude = typeof latitude !== 'undefined' ? latitude : "";
-	if (latitude === ""){ throw new Error("No puedes dejar el nombre vacio");}
+	if (latitude === ""){ throw new EmptyValueException("latitude");}
     longitude = typeof longitude !== 'undefined' ? longitude : "";
-    if (longitude === ""){ throw new Error("No puedes dejar el mail vacio");}
+    if (longitude === ""){ throw new EmptyValueException("longitude");}
     
     //Declaracion de atributos
     var _latitude = latitude;
@@ -577,7 +577,7 @@ function Coordinate(latitude, longitude) {
 		set:function(value){
 			value = typeof latitude !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar la latitud vacia");
+                throw new EmptyValueException("latitude");
             }else{
                 _latitude = value;
             }//Fin del if
@@ -591,7 +591,7 @@ function Coordinate(latitude, longitude) {
 		set:function(value){
 			value = typeof longitude !== 'undefined' ? value : "";
 		    if (value === ""){
-                throw new Error("No puedes dejar la longitud vacia");
+                throw new EmptyValueException("longitude");
             }else{
                 _longitude = value;
             }//Fin del if

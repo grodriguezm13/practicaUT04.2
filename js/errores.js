@@ -45,7 +45,7 @@ InvalidValueException.prototype.constructor = InvalidValueException;
 //Excepción acceso inválido a constructor
 function UninstantiatedObjectException(param) {
 	this.name = "UninstantiatedObjectException";
-	this.message = "No puede instanciar " + param + " objecto.";
+	this.message = "No puede instanciar " + param + " objeto.";
 }
 UninstantiatedObjectException.prototype = new BaseException(); 
 UninstantiatedObjectException.prototype.constructor = UninstantiatedObjectException;
@@ -57,3 +57,75 @@ function AbstractClassException(classValue) {
 }
 AbstractClassException.prototype = new BaseException(); 
 AbstractClassException.prototype.constructor = AbstractClassException;
+
+/* A PARTIR DE AQUI SE USAN EN VIDEOSYSTEM.JS */
+function CategoryExistsException() {
+	this.name = "CategoryExistsException";
+	this.message = "Error: La categoria ya existe.";
+}
+CategoryExistsException.prototype = new BaseException();
+CategoryExistsException.prototype.constructor = CategoryExistsException;
+
+function CategoryNotExistsException() {
+	this.name = "CategoryNotExistsException";
+	this.message = "Error: La categoria no existe.";
+}
+CategoryNotExistsException.prototype = new BaseException();
+CategoryNotExistsException.prototype.constructor = CategoryNotExistsException;
+
+function InvalidParamException(param) {
+	this.name = "InvalidParamException";
+	this.message = "Error: El parametro debe ser de tipo "+param+".";
+}
+InvalidParamException.prototype = new BaseException();
+InvalidParamException.prototype.constructor = InvalidParamException;
+
+function NullParamException(param) {
+	this.name = "NullParamException";
+	this.message = "Error: El parametro "+param+" no puede ser nulo";
+}
+NullParamException.prototype = new BaseException();
+NullParamException.prototype.constructor = NullParamException;
+
+function UserExistsException(param) {
+	this.name = "UserExistsException";
+	this.message = "Error: Ya existe un usuario con ese "+ param +".";
+}
+UserExistsException.prototype = new BaseException();
+UserExistsException.prototype.constructor = UserExistsException;
+
+function UserNotExistsException() {
+	this.name = "UserNotExistsException";
+	this.message = "Error: El usuario no existe.";
+}
+UserNotExistsException.prototype = new BaseException();
+UserNotExistsException.prototype.constructor = UserNotExistsException;
+
+function ProductionExistsException() {
+	this.name = "ProductionExistsException";
+	this.message = "Error: La produccion ya existe.";
+}
+ProductionExistsException.prototype = new BaseException();
+ProductionExistsException.prototype.constructor = ProductionExistsException;
+
+function ProductionNotExistsException() {
+	this.name = "ProductionNotExistsException";
+	this.message = "Error: La produccion no existe.";
+}
+ProductionNotExistsException.prototype = new BaseException();
+ProductionNotExistsException.prototype.constructor = ProductionNotExistsException;
+
+function ActorExistsException(param) {
+	this.name = "ActorExistsException";
+	this.message = "Error: Ya existe un actor con ese "+ param +".";
+}
+ActorExistsException.prototype = new BaseException();
+ActorExistsException.prototype.constructor = ActorExistsException;
+
+function ActorNotExistsException() {
+	this.name = "ActorNotExistsException";
+	this.message = "Error: El actor no existe.";
+}
+ActorNotExistsException.prototype = new BaseException();
+ActorNotExistsException.prototype.constructor = ActorNotExistsException;
+
