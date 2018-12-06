@@ -4,6 +4,9 @@
 
 Autor - Guillermo Rodriguez Moraga
 
+Version 1.0.5.2 - Modificacion de Objetos Movie y Serie
+- Se han corregido las llamadas a la funcion y al superconstructor
+
 Version 1.0.5.1 - Modificacion del codigo
 - Se ha modificado getCast
 

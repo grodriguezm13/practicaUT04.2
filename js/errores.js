@@ -21,9 +21,9 @@ InvalidAccessConstructorException.prototype.constructor = InvalidAccessConstruct
 //Excepciones de validación de parámetros. Reutilizables en todas las clases
 function ParameterValidationException() {
 	this.name = "ParameterValidationException";
-	this.message = "Error: Excepcion de validacion de parametros.";
+	this.message = "Error: Parametro invalido.";
 }
-ParameterValidationException.prototype = new BaseException(); //Heredamos de BaseException
+ParameterValidationException.prototype = new BaseException(); 
 ParameterValidationException.prototype.constructor = ParameterValidationException;
 
 //Excepción personalizada para indicar valores vacios.

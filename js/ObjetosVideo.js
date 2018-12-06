@@ -150,7 +150,7 @@ function Category(name, description = "Sin descripcion") {
 Category.prototype = {};
 Category.prototype.constructor = Category;
 Category.prototype.toString = function(){
-	return "Nombre: " + this.name + ". Descripcion: "+ this.description;
+	return "Nombre: " + this.name + ". Descripcion: "+ this.description + ".";
 };
 
 //Representa un recurso audiovisual.
@@ -164,6 +164,9 @@ function Resource(duration, link, audios = null, subtitles = null){
 	if (duration === ""){ throw new EmptyValueException("duration");}
 	link = typeof link !== 'undefined' ? link : "";
 	if (link === ""){ throw new EmptyValueException("link");}
+	if (link === 'undefined' || link === '') throw new EmptyValueException("link");
+	if (/^(http|https)\:\/\/[a-z0-9\.-]+\.[a-z]{2,4}/.test (link) !== true){		
+		throw new InvalidValueException("link", link);}
 
 	//Declaracion de atributos
     var _duration = duration;
@@ -231,7 +234,7 @@ function Resource(duration, link, audios = null, subtitles = null){
 Resource.prototype = {};
 Resource.prototype.constructor = Resource;
 Resource.prototype.toString = function(){
-	return "Duracion: " + this.duration + " minutos. Enlace del recurso: " + this.link + ". Audio: " + this.audios + ". Subtitulos: " + this.subtitles;
+	return "Duracion: " + this.duration + " minutos. Enlace del recurso: " + this.link + ". Audio: [" + this.audios + "]. Subtitulos: [" + this.subtitles + "]";
 };
 
 //Funcion para crear Production que tiene herencia con Movie y Serie
@@ -249,7 +252,13 @@ Resource.prototype.toString = function(){
 		if (title === ""){ throw new EmptyValueException("title");}
         publication = typeof Date !== 'undefined' ? publication : "";
         if (publication === ""){ throw new InvalidValueException("publication", publication);}
-        
+        nationality = typeof nationality !== 'undefined' ? nationality : "";
+		if (nationality === ""){ throw new InvalidValueException("nationality", nationality);}
+		synopsis = typeof synopsis !== 'undefined' ? synopsis : "";
+		if (synopsis === ""){ throw new InvalidValueException("synopsis", synopsis);}
+		image = typeof image !== 'undefined' ? image : "";
+		if (image === ""){ throw new InvalidValueException("image", image);}
+		
         //Declaracion de atributos
         var _title = title; 
         var _nationality = nationality;
@@ -332,14 +341,14 @@ Resource.prototype.toString = function(){
 	Production.prototype.constructor = Production;
 	//Se define toString con los datos
 	Production.prototype.toString = function(){
-		return "Titulo: " + this.title + ". Nacionalidad: " + this.nationality + ". Fecha publicacion: " + this.publication + ". Sipnosis: " + this.synopsis + ". Imagen: " + this.image;
+		return "Titulo: " + this.title + ". Nacionalidad: " + this.nationality + ". Fecha publicacion: " + this.publication + ". Sipnosis: " + this.synopsis + ". Imagen: " + this.image + ".";
 	}
 
 	//Definimos la subclase MOvie que hereda de Production y Representa un recurso película que podremos reproducir en el sistema
-	function Movie(resource = null, locations = null){
+	function Movie(title, nationality, publication, synopsis, image, resource = null, locations = null){
 		//Llamada al superconstructor. Debemos desactivar el seguro para realizarla.
 		abstractCreateLock = false;
-		Production.call(this,resource, locations);	
+		Production.call(this,title, nationality, publication, synopsis, image, resource, locations);
 		abstractCreateLock = true;
 
 		//La función se invoca con el operador new
@@ -383,14 +392,14 @@ Resource.prototype.toString = function(){
 	Movie.prototype = Object.create(Production.prototype); 
 	Movie.prototype.constructor = Movie;
 	Movie.prototype.toString = function(){
-		return Production.prototype.toString.call(this) + ". Recurso: " + this.resource + ". Coordenadas: " + this.locations;
+		return Production.prototype.toString.call(this) + " Recurso: [" + this.resource + "]. Coordenadas: [" + this.locations + "]";
 	}
 	
 	//Definimos la subclase serie que hereda de Production y representa un recurso serie que podremos reproducir
-	function Serie(seasons = null){
+	function Serie(title, nationality, publication, synopsis, image, seasons = null){
 		//Llamada al superconstructor. Debemos desactivar el seguro para realizarla.
 		abstractCreateLock = false;
-		Production.call(this,seasons);	
+		Production.call(this, title, nationality, publication, synopsis, image, seasons);	
 		abstractCreateLock = true;
 
 		//La función se invoca con el operador new
@@ -419,7 +428,7 @@ Resource.prototype.toString = function(){
 	Serie.prototype = Object.create(Production.prototype); 
 	Serie.prototype.constructor = Serie;
 	Serie.prototype.toString = function(){
-		return Production.prototype.toString.call(this) + ". Temporadas: " + this.season;
+		return Production.prototype.toString.call(this) + " Temporadas: [" + this.season + "]";
 	}
 
 	abstractCreateLock = true; //Activamos el seguro
@@ -480,7 +489,7 @@ function Season(title, episodes = null){
 Season.prototype = {};
 Season.prototype.constructor = Season;
 Season.prototype.toString = function(){
-	return "Titulo: " + this.title + ". Episodios: "+ this.episodes;
+	return this.title + ". Episodios: ["+ this.episodes + "]";
 };
 
 //Objeto para identificar los datos de una persona.
