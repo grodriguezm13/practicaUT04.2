@@ -381,9 +381,22 @@ var VideoSystem = (function () {
 				if(positionCategory !== -1){
 					//Si existe la categoria, busca la produccion
 					if(positionProduction !== -1){
-						//Si existe la produccion, la asigna a la categoria
-						//Coge la categoria que coincida con la position de la categoria encontrada.La propiedad production de ese elemento.Hace el push al array
-						_categories[positionCategory].productions.push(production);
+						//Si existe la produccion, la asigna al director
+						//Buscamos en el array de productions si coincide alguna con la introducida
+						var i = 0;
+						var encontrado = false;
+						while(i < _categories[positionCategory].productions.length && !encontrado){
+							if (_categories[positionCategory].productions[i].title === production.title){
+								encontrado = true;
+							}
+							i++;
+						}//Fin del while
+						if(!encontrado){
+							//Coge la categoria que coincida con la position de la categoria encontrada.La propiedad production de ese elemento.Hace el push al array
+							_categories[positionCategory].productions.push(production);
+						}else{
+							throw new AssignCategoryException();
+						}
 					}else{
 						//Si no existe la añade
 						this.addProduction(production);
@@ -454,8 +467,21 @@ var VideoSystem = (function () {
 					//Si existe el director, busca la produccion
 					if(positionProduction !== -1){
 						//Si existe la produccion, la asigna al director
-						//Coge el director que coincida con la position del director encontrado.La propiedad production de ese elemento.Hace el push al array
-						_directors[positionDirector].productions.push(production);
+						//Buscamos en el array de productions si coincide alguna con la introducida
+						var i = 0;
+						var encontrado = false;
+						while(i < _directors[positionDirector].productions.length && !encontrado){
+							if (_directors[positionDirector].productions[i].title === production.title){
+								encontrado = true;
+							}
+							i++;
+						}//Fin del while
+						if(!encontrado){
+							//Coge el actor que coincida con la position del actor encontrado.La propiedad production de ese elemento.Hace el push al array con el objeto literal
+							_directors[positionDirector].productions.push(production);
+						}else{
+							throw new AssignDirectorException();
+						}
 					}else{
 						//Si no existe la añade
 						this.addProduction(production);
@@ -527,14 +553,27 @@ var VideoSystem = (function () {
 					//Si existe el actor, busca la produccion
 					if(positionProduction !== -1){
 						//Si existe la produccion, la asigna al actor
-						//Coge el actor que coincida con la position del actor encontrado.La propiedad production de ese elemento.Hace el push al array con el objeto literal
-						_actors[positionActor].productions.push(
-							{
-								production: production,
-								character: character,
-								main: main
+						//Buscamos en el array de productions si coincide alguna con la introducida
+						var i = 0;
+						var encontrado = false;
+						while(i < _actors[positionActor].productions.length && !encontrado){
+							if (_actors[positionActor].productions[i].production.title === production.title){
+								encontrado = true;
 							}
-						);
+							i++;
+						}//Fin del while
+						if(!encontrado){
+							//Coge el actor que coincida con la position del actor encontrado.La propiedad production de ese elemento.Hace el push al array con el objeto literal
+							_actors[positionActor].productions.push(
+								{
+									production: production,
+									character: character,
+									main: main
+								}
+							);
+						}else{
+							throw new AssignActorException();
+						}
 					}else{
 						//Si no existe la añade
 						this.addProduction(production);

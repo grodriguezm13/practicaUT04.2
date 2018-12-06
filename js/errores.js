@@ -143,3 +143,23 @@ function DirectorNotExistsException() {
 DirectorNotExistsException.prototype = new BaseException();
 DirectorNotExistsException.prototype.constructor = DirectorNotExistsException;
 
+function AssignActorException() {
+	this.name = "AssignActorException";
+	this.message = "Error: El actor ya tiene asignada esa produccion.";
+}
+AssignActorException.prototype = new BaseException();
+AssignActorException.prototype.constructor = AssignActorException;
+
+function AssignDirectorException() {
+	this.name = "AssignDirectorException";
+	this.message = "Error: El director ya tiene asignada esa produccion.";
+}
+AssignDirectorException.prototype = new BaseException();
+AssignDirectorException.prototype.constructor = AssignDirectorException;
+
+function AssignCategoryException() {
+	this.name = "AssignCategoryException";
+	this.message = "Error: La categoria ya tiene asignada esa produccion.";
+}
+AssignCategoryException.prototype = new BaseException();
+AssignCategoryException.prototype.constructor = AssignCategoryException;

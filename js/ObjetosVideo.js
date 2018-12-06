@@ -407,7 +407,7 @@ Resource.prototype.toString = function(){
 			throw new InvalidAccessConstructorException();}
 
 		//Declaracion de atributos
-		var _seasons = seasons;
+		var _seasons = seasons || [];
 
 		//Declaracion de getter y setters
 		Object.defineProperty(this, 'season', {

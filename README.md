@@ -4,6 +4,11 @@
 
 Autor - Guillermo Rodriguez Moraga
 
+Version 1.1 - Correccion de errores y mejoras
+- Se ha modificado assignCategory, assignDirector, assignActor y ahora no deja asignar produccion si ya tiene esa produccion
+- Se han creado nuevos errores personalizados
+- Se ha modificado todo testVideo.js para que se pueda leer mejor por consola
+
 Version 1.0.5.2 - Modificacion de Objetos Movie y Serie
 - Se han corregido las llamadas a la funcion y al superconstructor
 
