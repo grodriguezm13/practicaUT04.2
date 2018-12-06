@@ -4,6 +4,14 @@
 
 Autor - Guillermo Rodriguez Moraga
 
+Version 1.0.5 - Creacion de metodos de VideoSystem
+- Se ha creado Getter directors, addDirector y removeDirector
+- Se ha creado assignCategories, desasignCategory y getProductionCategoryPosition
+- Se ha creado assignDirector, desasignDirector y getProductionDirectorPosition
+- Se ha creado assignActor, desasignActor y getProductionActorPosition
+- Se ha creado getCast, getProductionsDirector, getProductionsActor y getProductionsCategory
+- Se han añadido las funciones a testVideo.js
+
 Version 1.0.4 - Creacion de metodos de VideoSystem.
 - Se ha creado Getter categories, addCategory y removeCategory
 - Se ha creado Getter users, addUser y removeUser

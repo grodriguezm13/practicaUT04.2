@@ -129,3 +129,17 @@ function ActorNotExistsException() {
 ActorNotExistsException.prototype = new BaseException();
 ActorNotExistsException.prototype.constructor = ActorNotExistsException;
 
+function DirectorExistsException(param) {
+	this.name = "DirectorExistsException";
+	this.message = "Error: Ya existe un director con ese "+ param +".";
+}
+DirectorExistsException.prototype = new BaseException();
+DirectorExistsException.prototype.constructor = DirectorExistsException;
+
+function DirectorNotExistsException() {
+	this.name = "DirectorNotExistsException";
+	this.message = "Error: El director no existe.";
+}
+DirectorNotExistsException.prototype = new BaseException();
+DirectorNotExistsException.prototype.constructor = DirectorNotExistsException;
+

@@ -91,7 +91,7 @@ function testVideo(){
 	}
 	console.log("-----------------------------------------------");
 	//Mostramos las categorias que hay
-	console.log("Mostramos las categorias");
+	console.log("#### Mostramos las categorias ####");
 	var categorias = video.categories;
 	var categoria = categorias.next();
 	while (categoria.done !== true){
@@ -101,7 +101,8 @@ function testVideo(){
 	console.log("-----------------------------------------------");
 	//Añadimos una categoria 
 	try {
-		console.log("Volvemos a añadir la categoria Comedia: " + video.addCategory(category));
+		var category2 = new Category("Comedia");
+		console.log("Volvemos a añadir la categoria Comedia: " + video.addCategory(category2));
 	} catch (error) {
 		console.log("Ha fallado: " + error);
 	}
@@ -114,7 +115,7 @@ function testVideo(){
 	}
 	console.log("-----------------------------------------------");
 	//Mostramos las categorias que hay
-	console.log("Mostramos las categorias");
+	console.log("#### Mostramos las categorias ####");
 	var categorias = video.categories;
 	var categoria = categorias.next();
 	while (categoria.done !== true){
@@ -137,7 +138,7 @@ function testVideo(){
 	}
 	console.log("-----------------------------------------------");
 	//Mostramos las categorias que hay
-	console.log("Mostramos los usuarios");
+	console.log("#### Mostramos los usuarios ####");
 	var usuarios = video.users;
 	var usuario = usuarios.next();
 	while (usuario.done !== true){
@@ -153,7 +154,7 @@ function testVideo(){
 	}
 	console.log("-----------------------------------------------");
 	//Mostramos las categorias que hay
-	console.log("Mostramos los usuarios");
+	console.log("#### Mostramos los usuarios ####");
 	var usuarios = video.users;
 	var usuario = usuarios.next();
 	while (usuario.done !== true){
@@ -169,7 +170,7 @@ function testVideo(){
 	}
 	console.log("-----------------------------------------------");
 	//Mostramos las producciones que hay
-	console.log("Mostramos las producciones");
+	console.log("#### Mostramos las producciones ####");
 	var producciones = video.productions;
 	var produccion = producciones.next();
 	while (produccion.done !== true){
@@ -185,7 +186,7 @@ function testVideo(){
 	}
 	console.log("-----------------------------------------------");
 	//Mostramos las producciones que hay
-	console.log("Mostramos las producciones");
+	console.log("#### Mostramos las producciones ####");
 	var producciones = video.productions;
 	var produccion = producciones.next();
 	while (produccion.done !== true){
@@ -200,8 +201,15 @@ function testVideo(){
 		console.log("Ha fallado: " + error);
 	}
 	console.log("-----------------------------------------------");
+	//Añadimos otro actor
+	try {
+		var persona2 = new Person("Manuel","De la Rosa",new Date(1993,10,25),"Jimenez");
+		console.log("Añadimos otro actor: " + video.addActor(persona2));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}	
 	//Mostramos los actores que hay
-	console.log("Mostramos los actores");
+	console.log("#### Mostramos los actores ####");
 	var actores = video.actors;
 	var actor = actores.next();
 	while (actor.done !== true){
@@ -217,7 +225,7 @@ function testVideo(){
 	}
 	console.log("-----------------------------------------------");
 	//Mostramos los actores que hay
-	console.log("Mostramos los actores");
+	console.log("#### Mostramos los actores ####");
 	var actores = video.actors;
 	var actor = actores.next();
 	while (actor.done !== true){
@@ -225,6 +233,171 @@ function testVideo(){
 		actor = actores.next();
 	}
 	console.log("-----------------------------------------------");
+	//Añadimos un director
+	try {
+		console.log("Añadimos un director: " + video.addDirector(persona1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Añadimos otro director
+	try {
+		var persona2 = new Person("Manuel","De la Rosa",new Date(1993,10,25),"Jimenez");
+		console.log("Añadimos otro director: " + video.addDirector(persona2));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}	
+	console.log("-----------------------------------------------");
+	//Mostramos los directores que hay
+	console.log("#### Mostramos los directores ####");
+	var directores = video.directors;
+	var director = directores.next();
+	while (director.done !== true){
+		console.log ("" + director.value);
+		director = directores.next();
+	}
+	console.log("-----------------------------------------------");
+	//Borramos un director :(
+	try {
+		console.log("Eliminamos al director "+ persona1.name +": " + video.removeDirector(persona1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Mostramos los directores que hay
+	console.log("#### Mostramos los directores ####");
+	var directores = video.directors;
+	var director = directores.next();
+	while (director.done !== true){
+		console.log ("" + director.value);
+		director = directores.next();
+	}
+	console.log("-----------------------------------------------");
+	//Asignamos una produccion a una categoria
+	try {
+		var category2 = new Category("Comedia");	
+		var movie1 = new Movie("Aterriza como puedas",new Date(1980,05,05));
+		console.log("Asignamos la produccion '"+ movie1.title +"' a la categoria '"+ category2.name +"': " + video.assignCategory(category2,movie1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Mostramos las producciones de las categorias que hay
+	console.log("#### Mostramos las producciones de la categoria " + category2.name + " ####");
+	var productions = video.getProductionsCategory(category2);
+	var production = productions.next();
+	while (production.done !== true){
+		console.log ("" + production.value.title);		
+		production = productions.next();
+	}
+	console.log("-----------------------------------------------");
+	//Desasignamos una produccion a una categoria
+	try {
+		console.log("Quitamos la produccion '"+ movie1.title +"' de la categoria '"+ category2.name +"': " + video.deassignCategory(category2,movie1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Desasignamos una produccion a una categoria
+	try {
+		console.log("Quitamos la produccion '"+ movie1.title +"' de la categoria '"+ category2.name +"': " + video.deassignCategory(category2,movie1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Mostramos las producciones de las categorias que hay
+	console.log("#### Mostramos las producciones de la categoria " + category2.name + " ####");
+	var productions = video.getProductionsCategory(category2);
+	var production = productions.next();
+	while (production.done !== true){
+		console.log ("" + production.value.title);		
+		production = productions.next();
+	}
+	console.log("-----------------------------------------------");
+	//Asignamos una produccion a un director
+	try {	
+		console.log("Asignamos la produccion '"+ movie1.title +"' al director '"+ persona2.name +"': " + video.assignDirector(persona2,movie1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Mostramos las producciones de las categorias que hay
+	console.log("#### Mostramos las producciones del director " + persona2.name + " ####");
+	var productions = video.getProductionsDirector(persona2);
+	var production = productions.next();
+	while (production.done !== true){
+		console.log ("" + production.value.title);		
+		production = productions.next();
+	}
+	console.log("-----------------------------------------------");
+	//Desasignamos una produccion a un director
+	try{
+		console.log("Quitamos la produccion '"+ movie1.title +"' al director '"+ persona2.name +"': " + video.deassignDirector(persona2,movie1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Desasignamos una produccion a un director
+	try{
+		console.log("Quitamos la produccion '"+ movie1.title +"' al director '"+ persona2.name +"': " + video.deassignDirector(persona2,movie1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Mostramos las producciones de las categorias que hay
+	console.log("#### Mostramos las producciones del director " + persona2.name + " ####");
+	var productions = video.getProductionsDirector(persona2);
+	var production = productions.next();
+	while (production.done !== true){
+		console.log ("" + production.value.title);		
+		production = productions.next();
+	}
+	console.log("-----------------------------------------------");
+	//Asignamos una produccion a un actorr
+	try {	
+		console.log("Asignamos la produccion '"+ movie1.title +"' al actor '"+ persona2.name +"': " + video.assignActor(persona2,movie1,"Ciudadano",false));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Mostramos las producciones de las categorias que hay
+	console.log("#### Mostramos las producciones del actor " + persona2.name + " ####");
+	var productions = video.getProductionsActor(persona2);
+	var production = productions.next();
+	while (production.done !== true){
+		console.log ("Produccion: " + production.value.title + ". Papel: "+production.papel);		
+		production = productions.next();
+	}
+	console.log("-----------------------------------------------");
+	//Desasignamos una produccion a un actor
+	try{
+		console.log("Quitamos la produccion '"+ movie1.title +"' al actor '"+ persona2.name +"': " + video.deassignActor(persona2,movie1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Desasignamos una produccion a un actor
+	try{
+		console.log("Quitamos la produccion '"+ movie1.title +"' al actor '"+ persona2.name +"': " + video.deassignActor(persona2,movie1));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Mostramos las producciones de las categorias que hay
+	console.log("#### Mostramos las producciones del actor " + persona2.name + " ####");
+	var productions = video.getProductionsActor(persona2);
+	var production = productions.next();
+	while (production.done !== true){
+		console.log ("Produccion: " + production.value.title + ". Papel: "+production.papel);		
+		production = productions.next();
+	}
+	console.log("-----------------------------------------------");
+	
+
+
+
+
+
 
 }//Fin de testVideo
 

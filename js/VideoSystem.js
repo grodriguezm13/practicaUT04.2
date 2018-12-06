@@ -46,7 +46,7 @@ var VideoSystem = (function () {
 				       next: function(){
 						   return nextIndex < _categories.length ?
 						   //Mientras no acabe devuelve un objeto con el valor y la propiedad done
-				               {value: _categories[nextIndex++], done: false} :
+				               {value: _categories[nextIndex++].category, done: false} :
 				               {done: true};
 				       }
 				    }
@@ -56,7 +56,7 @@ var VideoSystem = (function () {
 			//Dado un objeto, devuelve la posición de ese objeto.
 			this.getCategoryPosition = function(category){
 				function compareCategories(arrayCategory) {
-				  return (arrayCategory.name === category.name)
+				  return (arrayCategory.category.name === category.name)
 				}
 				return _categories.findIndex(compareCategories);		
 			}
@@ -72,7 +72,12 @@ var VideoSystem = (function () {
 				var position = this.getCategoryPosition(category); 
 				//Si no existe la categoria se añade al array	
 				if (position === -1){
-					_categories.push(category);
+					_categories.push(
+						{
+							category: category,
+							productions: []
+						}
+					);
 				} else{
 					throw new CategoryExistsException();
 				}
@@ -240,7 +245,7 @@ var VideoSystem = (function () {
 					next: function(){
 						return nextIndex < _actors.length ?
 						//Mientras no acabe devuelve un objeto con el valor y la propiedad done
-							{value: _actors[nextIndex++], done: false} :
+							{value: _actors[nextIndex++].actor, done: false} :
 							{done: true};
 					}
 					}
@@ -259,7 +264,12 @@ var VideoSystem = (function () {
 				//Si la posicion de existeNombre es igual a -1, no
 				//existe ningun actor con el mismo nombre
 				if (existeNombre === -1){
-					_actors.push(actor);
+					_actors.push(
+						{
+							actor: actor,
+							productions: []
+						}
+					);
 				} else{
 					throw new ActorExistsException("name");
 				}
@@ -269,7 +279,7 @@ var VideoSystem = (function () {
 			//Dado un objeto Actor, devuelve la posición de ese objeto.
 			this.getActorPosition = function(actor){
 				function compareActors(arrayActor) {
-				  return (arrayActor.name === actor.name)
+				  return (arrayActor.actor.name === actor.name || arrayActor.actor.lastName1 === actor.lastName1)
 				}
 				return _actors.findIndex(compareActors);		
 			}
@@ -282,11 +292,9 @@ var VideoSystem = (function () {
 				if (actor == null) {
 					throw new NullParamException("actor");
 				}
-				var existeNombre = this.getActorPosition(actor); 
-				//Si la posicion de existeNombre es igual a -1, no
-				//existe ningun actor con el mismo nombre
-				if (existeNombre === -1){
-					_actors.splice(existeNombre, 1);
+				var position = this.getActorPosition(actor);
+				if (position !== -1){
+					_actors.splice(position, 1);			
 				} else{
 					throw new ActorNotExistsException();
 				}
@@ -300,60 +308,386 @@ var VideoSystem = (function () {
 					var nextIndex = 0;		    
 					return {
 					next: function(){
-						return nextIndex < _actors.length ?
+						return nextIndex < _directors.length ?
 						//Mientras no acabe devuelve un objeto con el valor y la propiedad done
-							{value: _actors[nextIndex++], done: false} :
+							{value: _directors[nextIndex++].director, done: false} :
 							{done: true};
 					}
 					}
 				}	
 			});
 
-			//Añade una nuevo actor
-			this.addActor = function(actor){
-				if(!(actor instanceof Person)){
+			//Añade una nuevo director
+			this.addDirector = function(director){
+				if(!(director instanceof Person)){
 					throw new InvalidParamException("Person");
 				}
+				if (director == null) {
+					throw new NullParamException("director");
+				}
+				var position = this.getDirectorPosition(director); 
+				if (position === -1){
+					_directors.push(
+						{
+							director: director,
+							productions: []
+						}
+					);
+				} else{
+					throw new DirectorExistsException("name");
+				}
+				return _directors.length;
+			};//Fin de addDirector
+
+			//Dado un objeto Director, devuelve la posición de ese objeto.
+			this.getDirectorPosition = function(director){
+				function compareDirectors(arrayDirector) {
+					return (arrayDirector.director.name === director.name || arrayDirector.director.lastName1 === director.lastName1)
+				  }
+				  return _directors.findIndex(compareDirectors);		
+			}//Fin de getDirectorPosition
+
+			//Elimina un director del sistema
+			this.removeDirector = function(director){
+				if(!(director instanceof Person)){
+					throw new InvalidParamException("Person");
+				}
+				if (director == null) {
+					throw new NullParamException("director");
+				}
+				var position = this.getDirectorPosition(director); 
+				if (position !== -1){
+					_directors.splice(position, 1);
+				} else{
+					throw new DirectorNotExistsException();
+				}
+				return _directors.length;
+			};//Fin de removeDirector
+
+			/* LAS SIGUIENTES FUNCIONES ASIGNAN Y DESAGINAN A CATEGORY */
+			//Asigna uno más producciones a una categoría. Si el objeto Category o Production no existen se añaden al sistema.
+			this.assignCategory = function(category, production){
+				//Primero se comprueba que no sean nulos ningun parametro
+				if (category == null) {
+					throw new NullParamException("category");
+				}
+				if (production == null) {
+					throw new NullParamException("production");
+				}
+				//Busca la posicion de esa categoria en el array _categories para ver si existe, de no existir debe añadirlo
+				var positionCategory = this.getCategoryPosition(category); 
+				//Busca la posicion de esa produccion en el array _production para ver si existe, de no existir debe añadirlo
+				var positionProduction = this.getProductionPosition(production);
+				if(positionCategory !== -1){
+					//Si existe la categoria, busca la produccion
+					if(positionProduction !== -1){
+						//Si existe la produccion, la asigna a la categoria
+						//Coge la categoria que coincida con la position de la categoria encontrada.La propiedad production de ese elemento.Hace el push al array
+						_categories[positionCategory].productions.push(production);
+					}else{
+						//Si no existe la añade
+						this.addProduction(production);
+						//Vuelve a llamar a la funcion
+						this.assignCategory(category, production);
+					}//Fin del if	
+				}else{
+					//Si no existe la añade
+					this.addCategory(category);
+					//Vuelve a llamar a la funcion
+					this.assignCategory(category, production);
+				}//Fin del if
+				return _categories[positionCategory].productions.length;
+			};//Fin de assignCategory
+
+			//Dado una produccion y el array productions de las categories, devuelve la posición de esa produccion.
+			this.getProductionCategoryPosition = function(production, categoryProduction){
+				function compareElements(element) {
+					return (element.title === production.title)
+				}
+				return categoryProduction.findIndex(compareElements);		
+			}//Fin de getProductionCategoryPosition
+
+			//Desasigna una o más producciones de una categoría.
+			this.deassignCategory = function(category, production){
+				//Primero se comprueba que no sean nulos ningun parametro
+				if (category == null) {
+					throw new NullParamException("category");
+				}
+				if (production == null) {
+					throw new NullParamException("production");
+				}
+				//Busca la posicion de esa categoria en el array _categories para ver si existe
+				var positionCategory = this.getCategoryPosition(category); 
+				//Busca la posicion de esa produccion en el array _production que hay como propiedad dentro de _categories
+				var positionProduction = this.getProductionCategoryPosition(production, _categories[positionCategory].productions);
+				if(positionCategory !== -1){
+					//Si existe la categoria, busca la produccion
+					if(positionProduction !== -1){		
+						//Si la produccion eciste dentro del array _production que hay como propiedad dentro de _categories			
+						_categories[positionCategory].productions.splice(positionProduction,1);
+					}else{
+						//Si no existe la produccion
+						throw new ProductionNotExistsException();
+					}//Fin del if	
+				}else{
+					//Si no existe la categoria
+					throw new CategoryNotExistsException();
+				}//Fin del if
+				return _categories[positionCategory].productions.length;
+			};//Fin de deassignCategory
+
+			/* LAS SIGUIENTES FUNCIONES ASIGNAN Y DESAGINAN A DIRECTOR */
+			//Asigna uno más producciones a un director.Si el director o el objeto Production no existen se añaden al sistema.
+			this.assignDirector = function(director, production){
+				//Primero se comprueba que no sean nulos ningun parametro
+				if (director == null) {
+					throw new NullParamException("director");
+				}
+				if (production == null) {
+					throw new NullParamException("production");
+				}
+				//Busca la posicion de esa categoria en el array _directors para ver si existe, de no existir debe añadirlo
+				var positionDirector = this.getDirectorPosition(director); 
+				//Busca la posicion de esa produccion en el array _production para ver si existe, de no existir debe añadirlo
+				var positionProduction = this.getProductionPosition(production);
+				if(positionDirector !== -1){
+					//Si existe el director, busca la produccion
+					if(positionProduction !== -1){
+						//Si existe la produccion, la asigna al director
+						//Coge el director que coincida con la position del director encontrado.La propiedad production de ese elemento.Hace el push al array
+						_directors[positionDirector].productions.push(production);
+					}else{
+						//Si no existe la añade
+						this.addProduction(production);
+						//Vuelve a llamar a la funcion
+						this.assignDirector(director, production);
+					}//Fin del if	
+				}else{
+					//Si no existe la añade
+					this.addDirector(director);
+					//Vuelve a llamar a la funcion
+					this.assignDirector(director, production);
+				}//Fin del if
+				return _directors[positionDirector].productions.length;
+			};//Fin de assignDirector
+
+			//Dado una produccion y el array productions de los directores, devuelve la posición de esa produccion.
+			this.getProductionDirectorPosition = function(production, directorProduction){
+				function compareElements(element) {
+					return (element.title === production.title)
+				}
+				return directorProduction.findIndex(compareElements);		
+			}//Fin de getProductionDirectorPosition
+
+			//Desasigna una o más producciones de un director.
+			this.deassignDirector = function(director, production){
+				//Primero se comprueba que no sean nulos ningun parametro
+				if (director == null) {
+					throw new NullParamException("director");
+				}
+				if (production == null) {
+					throw new NullParamException("production");
+				}
+				//Busca la posicion de ese director en el array _directors para ver si existe
+				var positionDirector = this.getDirectorPosition(director); 
+				//Busca la posicion de esa produccion en el array _production para ver si existe
+				var positionProduction = this.getProductionDirectorPosition(production, _directors[positionDirector].productions);
+				if(positionDirector !== -1){
+					//Si existe el director, busca la produccion
+					if(positionProduction !== -1){
+						//Si existe la produccion, la asigna al director
+						//Coge el director que coincida con la position del director encontrado.La propiedad production de ese elemento.Hace el splice al array
+						_directors[positionDirector].productions.splice(positionProduction,1);
+					}else{
+						//Si no existe la produccion
+						throw new ProductionNotExistsException();
+					}//Fin del if	
+				}else{
+					//Si no existe el director
+					throw new DirectorNotExistsException();
+				}//Fin del if
+				return _directors[positionDirector].productions.length;
+			};//Fin de deassignDirector
+
+			/* LAS SIGUIENTES FUNCIONES ASIGNAN Y DESAGINAN A ACTOR */
+			//Asigna uno más producciones a un actor. Si el actor o el objeto Production no existen se añaden al sistema.
+			this.assignActor = function(actor, production, character, main){
+				//Primero se comprueba que no sean nulos ningun parametro
 				if (actor == null) {
 					throw new NullParamException("actor");
 				}
-				var existeNombre = this.getActorPosition(actor); 
-				//Si la posicion de existeNombre es igual a -1, no
-				//existe ningun actor con el mismo nombre
-				if (existeNombre === -1){
-					_actors.push(actor);
-				} else{
-					throw new ActorExistsException("name");
+				if (production == null) {
+					throw new NullParamException("production");
 				}
-				return _actors.length;
-			};//Fin de addActor
+				//Busca la posicion de esa categoria en el array _actors para ver si existe, de no existir debe añadirlo
+				var positionActor = this.getActorPosition(actor); 
+				//Busca la posicion de esa produccion en el array _production para ver si existe, de no existir debe añadirlo
+				var positionProduction = this.getProductionPosition(production);
+				if(positionActor !== -1){
+					//Si existe el actor, busca la produccion
+					if(positionProduction !== -1){
+						//Si existe la produccion, la asigna al actor
+						//Coge el actor que coincida con la position del actor encontrado.La propiedad production de ese elemento.Hace el push al array con el objeto literal
+						_actors[positionActor].productions.push(
+							{
+								production: production,
+								character: character,
+								main: main
+							}
+						);
+					}else{
+						//Si no existe la añade
+						this.addProduction(production);
+						//Vuelve a llamar a la funcion
+						this.assignActor(actor, production, character, main);
+					}//Fin del if	
+				}else{
+					//Si no existe lo añade
+					this.addActor(actor);
+					//Vuelve a llamar a la funcion
+					this.assignActor(actor, production, character, main);
+				}//Fin del if
+				return _actors[positionActor].productions.length;
+			};//Fin de assignActor
 
-			//Dado un objeto Actor, devuelve la posición de ese objeto.
-			this.getActorPosition = function(actor){
-				function compareActors(arrayActor) {
-				  return (arrayActor.name === actor.name)
+			//Dado una produccion y el array productions de los actores, devuelve la posición de esa produccion.
+			this.getProductionActorPosition = function(production, actorProduction){
+				function compareElements(element) {
+					return (element.production.title === production.title)
 				}
-				return _actors.findIndex(compareActors);		
-			}
+				return actorProduction.findIndex(compareElements);		
+			}//Fin de getProductionActorPosition
 
-			//Elimina un actor del sistema
-			this.removeActor = function(actor){
-				if(!(actor instanceof Person)){
-					throw new InvalidParamException("Person");
-				}
+			//Desasigna una o más producciones de un actor.
+			this.deassignActor = function(actor, production){
+				//Primero se comprueba que no sean nulos ningun parametro
 				if (actor == null) {
 					throw new NullParamException("actor");
 				}
-				var existeNombre = this.getActorPosition(actor); 
-				//Si la posicion de existeNombre es igual a -1, no
-				//existe ningun actor con el mismo nombre
-				if (existeNombre === -1){
-					_actors.splice(existeNombre, 1);
-				} else{
+				if (production == null) {
+					throw new NullParamException("production");
+				}
+				//Busca la posicion de esa actor en el array _actors para ver si existe
+				var positionActor = this.getActorPosition(actor); 
+				//Busca la posicion de esa produccion en el array _production para ver si existe
+				var positionProduction = this.getProductionActorPosition(production, _actors[positionActor].productions);
+				if(positionActor !== -1){
+					//Si existe el actor, busca la produccion
+					if(positionProduction !== -1){
+						_actors[positionActor].productions.splice(positionProduction,1);
+					}else{
+						//Si no existe la produccion
+						throw new ProductionNotExistsException();
+					}//Fin del if	
+				}else{
+					//Si no existe el actor
 					throw new ActorNotExistsException();
-				}
-				return _actors.length;
-			};//Fin de removeUser
+				}//Fin del if
+				return _actors[positionActor].productions.length;
+			};//Fin de deassignActor
+
+			/* LAS SIGUIENTES FUNCIONES SON LOS ITERADORES DE LAS FUNCIONES DE ASSIGN Y DESASSIGN ANTERIORES */
+			//Obtiene un iterador con la relación de los actores del reparto una producción y sus personajes.
+			this.getCast = function(category){
+				if (category == null) {
+					throw new NullParamException("category");
+				}			
+				var positionCategory = this.getCategoryPosition(category); 	
+				if (positionCategory === -1) {throw new CategoryNotExistsException();}
+				var nextIndex = 0;
+			    return {
+			       next: function(){
+			       		var production = null;
+			       		while (nextIndex < _categories[positionCategory].productions.length && production === null){
+			       			if (_categories[positionCategory].category.name === category.name){
+								production = _categories[positionCategory].productions[nextIndex];
+			       			}
+			       			nextIndex++;
+			       		}
+			       		if (production !== null){
+			       			return {value: production, done: false}
+			       		}
+			       		if (nextIndex >= _categories[positionCategory].productions.length) return {done: true};
+			       }
+			    }
+			};//Fin de getCast
+
+			//Obtiene un iterador con las producciones de un director.
+			this.getProductionsDirector = function(director){
+				if (director == null) {
+					throw new NullParamException("director");
+				}			
+				var positionDirector = this.getDirectorPosition(director); 	
+				if (positionDirector === -1) {throw new DirectorNotExistsException();}
+				var nextIndex = 0;
+			    return {
+			       next: function(){
+			       		var directors = null;
+			       		while (nextIndex < _directors[positionDirector].productions.length && directors === null){
+			       			if (_directors[positionDirector].director.name === director.name){
+								directors = _directors[positionDirector].productions[nextIndex];
+			       			}
+			       			nextIndex++;
+			       		}
+			       		if (directors !== null){
+			       			return {value: directors, done: false}
+			       		}
+			       		if (nextIndex >= _directors[positionDirector].productions.length) return {done: true};
+			       }
+			    }
+			};//Fin de getProductionsDirector
+
+			//Obtiene un iterador con las producciones de un actor y su papel en la producción.
+			this.getProductionsActor = function(actor){
+				if (actor == null) {
+					throw new NullParamException("actor");
+				}			
+				var positionActor = this.getActorPosition(actor); 	
+				if (positionActor === -1) {throw new ActorNotExistsException();}
+				var nextIndex = 0;
+			    return {
+			       next: function(){
+						   var production = null;
+						   var papel = null;
+			       		while (nextIndex < _actors[positionActor].productions.length && production === null){
+			       			if (_actors[positionActor].actor.name === actor.name){
+								production = _actors[positionActor].productions[nextIndex].production;
+								papel = _actors[positionActor].productions[nextIndex].character;
+			       			}
+			       			nextIndex++;
+			       		}
+			       		if (production !== null){
+			       			return {value: production, papel: papel, done: false}
+			       		}
+			       		if (nextIndex >= _actors[positionActor].productions.length) return {done: true};
+			       }
+			    }
+			};//Fin de getProductionsActor
+
+			//Obtiene un iterador con las producciones de una categoría determinada.
+			this.getProductionsCategory = function(category){
+				if (category == null) {
+					throw new NullParamException("category");
+				}			
+				var positionCategory = this.getCategoryPosition(category); 	
+				if (positionCategory === -1) {throw new CategoryNotExistsException();}
+				var nextIndex = 0;
+			    return {
+			       next: function(){
+			       		var production = null;
+			       		while (nextIndex < _categories[positionCategory].productions.length && production === null){
+			       			if (_categories[positionCategory].category.name === category.name){
+								production = _categories[positionCategory].productions[nextIndex];
+			       			}
+			       			nextIndex++;
+			       		}
+			       		if (production !== null){
+			       			return {value: production, done: false}
+			       		}
+			       		if (nextIndex >= _categories[positionCategory].productions.length) return {done: true};
+			       }
+			    }
+			};//Fin de getProductionsCategory
 
 
 
