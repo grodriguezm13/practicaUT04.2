@@ -392,6 +392,22 @@ function testVideo(){
 		production = productions.next();
 	}
 	console.log("-----------------------------------------------");
+	//Asignamos una produccion a un actorr
+	try {	
+		console.log("Asignamos de nuevo la produccion '"+ movie1.title +"' al actor '"+ persona2.name +"': " + video.assignActor(persona2,movie1,"Ciudadano",false));
+	} catch (error) {
+		console.log("Ha fallado: " + error);
+	}
+	console.log("-----------------------------------------------");
+	//Mostramos el reparto de una produccion
+	console.log("#### Mostramos el reparto de '" + movie1.title + "' ####");
+	var elenco = video.getCast(movie1);
+	var actor = elenco.next();
+	while (actor.done !== true){
+		console.log ("Actor: " + actor.value.name + ". Papel: "+ actor.papel + ". Principal: " + actor.principal);		
+		actor = elenco.next();
+	}
+	console.log("-----------------------------------------------");
 	
 
 

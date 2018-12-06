@@ -588,28 +588,37 @@ var VideoSystem = (function () {
 
 			/* LAS SIGUIENTES FUNCIONES SON LOS ITERADORES DE LAS FUNCIONES DE ASSIGN Y DESASSIGN ANTERIORES */
 			//Obtiene un iterador con la relación de los actores del reparto una producción y sus personajes.
-			this.getCast = function(category){
-				if (category == null) {
-					throw new NullParamException("category");
+			this.getCast = function(production){
+				if (production == null) {
+					throw new NullParamException("production");
 				}			
-				var positionCategory = this.getCategoryPosition(category); 	
-				if (positionCategory === -1) {throw new CategoryNotExistsException();}
-				var nextIndex = 0;
+				var positionProduction = this.getProductionPosition(production); 	
+				if (positionProduction === -1) {throw new ProductionNotExistsException();}
+				var nextActor = 0;
+				var nextProduction = 0;
 			    return {
-			       next: function(){
-			       		var production = null;
-			       		while (nextIndex < _categories[positionCategory].productions.length && production === null){
-			       			if (_categories[positionCategory].category.name === category.name){
-								production = _categories[positionCategory].productions[nextIndex];
-			       			}
-			       			nextIndex++;
-			       		}
-			       		if (production !== null){
-			       			return {value: production, done: false}
-			       		}
-			       		if (nextIndex >= _categories[positionCategory].productions.length) return {done: true};
-			       }
-			    }
+					next: function(){
+						var actor = null;
+						var papel = null;
+						var principal = null;
+						while (nextActor < _actors.length && actor === null){
+							if (nextProduction < _actors[nextActor].productions.length && _actors[nextActor].productions[nextProduction].production.title === production.title){
+								actor = _actors[nextActor].actor;
+								papel = _actors[nextActor].productions[nextProduction].character;
+								principal = _actors[nextActor].productions[nextProduction].main;
+							}
+							nextProduction++;
+							if (nextProduction >= _actors[nextActor].productions.length){
+								nextProduction = 0;
+								nextActor++;
+							}
+						}
+						if (actor !== null && papel !== null && principal !== null){
+							return {value: actor, papel: papel, principal: principal, done: false}
+						}
+						if (nextActor >= _actors.length) return {done: true};
+					}
+				}
 			};//Fin de getCast
 
 			//Obtiene un iterador con las producciones de un director.

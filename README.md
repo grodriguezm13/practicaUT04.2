@@ -4,6 +4,9 @@
 
 Autor - Guillermo Rodriguez Moraga
 
+Version 1.0.5.1 - Modificacion del codigo
+- Se ha modificado getCast
+
 Version 1.0.5 - Creacion de metodos de VideoSystem
 - Se ha creado Getter directors, addDirector y removeDirector
 - Se ha creado assignCategories, desasignCategory y getProductionCategoryPosition
